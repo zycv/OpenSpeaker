@@ -76,3 +76,6 @@ target_link_libraries(frontend PUBLIC utils)
 
 add_executable(fbank_main frontend/fbank_main.cc)
 target_link_libraries(fbank_main PUBLIC frontend utils ${TORCH_LIBRARIES})
+
+add_executable(libtorch_test test_scripts/libtorch_test.cc)
+target_link_libraries(libtorch_test PUBLIC frontend utils ${TORCH_LIBRARIES})
