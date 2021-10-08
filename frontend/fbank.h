@@ -21,9 +21,9 @@
 #include <utility>
 #include <vector>
 
+#include <glog/logging.h>
 #include "frontend/fft.h"
 #include "utils/log.h"
-#include <glog/logging.h>
 
 namespace wenet {
 

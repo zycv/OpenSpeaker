@@ -8,7 +8,7 @@
 
 namespace wenet {
 
-void make_sintbl(int n, float* sintbl) {
+void make_sintbl(int n, float *sintbl) {
   int i, n2, n4, n8;
   float c, s, dc, ds, t;
 
@@ -34,7 +34,7 @@ void make_sintbl(int n, float* sintbl) {
   for (i = 0; i < n2 + n4; ++i) sintbl[i + n2] = -sintbl[i];
 }
 
-void make_bitrev(int n, int* bitrev) {
+void make_bitrev(int n, int *bitrev) {
   int i, j, k, n2;
 
   n2 = n / 2;
@@ -56,7 +56,7 @@ void make_bitrev(int n, int* bitrev) {
 // x:real part
 // y:image part
 // n: fft length
-int fft(const int* bitrev, const float* sintbl, float* x, float* y, int n) {
+int fft(const int *bitrev, const float *sintbl, float *x, float *y, int n) {
   int i, j, k, ik, h, d, k2, n4, inverse;
   float t, s, c, dx, dy;
 

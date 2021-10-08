@@ -19,7 +19,7 @@
 
 namespace wenet {
 
-FeaturePipeline::FeaturePipeline(const FeaturePipelineConfig& config)
+FeaturePipeline::FeaturePipeline(const FeaturePipelineConfig &config)
     : config_(config),
       feature_dim_(config.num_bins),
       fbank_(config.num_bins, config.sample_rate, config.frame_length,
@@ -27,7 +27,7 @@ FeaturePipeline::FeaturePipeline(const FeaturePipelineConfig& config)
       num_frames_(0),
       input_finished_(false) {}
 
-void FeaturePipeline::AcceptWaveform(const std::vector<float>& wav) {
+void FeaturePipeline::AcceptWaveform(const std::vector<float> &wav) {
   std::vector<std::vector<float>> feats;
   std::vector<float> waves;
   waves.insert(waves.end(), remained_wav_.begin(), remained_wav_.end());
@@ -55,7 +55,7 @@ void FeaturePipeline::set_input_finished() {
   finish_condition_.notify_one();
 }
 
-bool FeaturePipeline::ReadOne(std::vector<float>* feat) {
+bool FeaturePipeline::ReadOne(std::vector<float> *feat) {
   if (!feature_queue_.Empty()) {
     *feat = std::move(feature_queue_.Pop());
     return true;
@@ -77,7 +77,7 @@ bool FeaturePipeline::ReadOne(std::vector<float>* feat) {
 }
 
 bool FeaturePipeline::Read(int num_frames,
-                           std::vector<std::vector<float>>* feats) {
+                           std::vector<std::vector<float>> *feats) {
   feats->clear();
   std::vector<float> feat;
   while (feats->size() < num_frames) {
