@@ -13,7 +13,7 @@ git clone https://github.com/zycv/OpenSpeaker.git
 - Build 
 
 ``` sh
-cd OpenSpeaker && mkdir build && cd build && cmake .. && cmake --build .
+cd OpenSpeaker && mkdir build && cd build && cmake .. && cmake --build . -j8
 ```
 - Run
 
@@ -34,3 +34,28 @@ Then you will see output like this:
 >I1010 00:04:44.358219  5598 voiceprint_main.cc:118] `Cosine similarity`: 0.975539
 
 The `Cosine similarity` in the last line indicates the similarity of the current two speakers.
+
+- Optional
+
+If you want to test other audio or run with another model, you can run:
+
+``` sh
+GLOG_logtostderr=1 ./voiceprint_main --help
+```
+
+Then you will see the help information as follows:
+
+``` sh
+-enroll_wav (First wav as enroll wav.) type: string
+    default: "../test_data/BAC009S0749W0480.wav"
+
+-feats_dims (Dims for input features.) type: uint32 default: 24
+
+-model (Path to voiceprint model.) type: string default: "../model/tdnn.pt"
+
+-sample_rate (Wav sample rate supported.) type: uint32 default: 16000
+
+-test_wav (Second wav as test wav.) type: string
+    default: "../test_data/BAC009S0749W0489.wav"
+
+```
