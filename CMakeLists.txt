@@ -9,6 +9,19 @@ include_directories(
 
 include(FetchContent)
 
+if(NOT MSVC)
+  # Keep the same with openfst, -fPIC or -fpic
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -pthread -fPIC")
+endif()
+
+# third_party: gflags
+FetchContent_Declare(gflags
+  URL      https://github.com/gflags/gflags/archive/v2.2.1.zip
+  URL_HASH SHA256=4e44b69e709c826734dbbbd5208f61888a2faf63f239d73d8ba0011b2dccc97a
+)
+FetchContent_MakeAvailable(gflags)
+include_directories(${gflags_BINARY_DIR}/include)
+
 # third_party: glog
 FetchContent_Declare(
   glog
@@ -67,7 +80,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${TORCH_CXX_FLAGS} -DC10_USE_GLOG")
 
 # utils
 add_library(utils STATIC utils/string.cc utils/utils.cc)
-target_link_libraries(utils PUBLIC glog::glog)
+target_link_libraries(utils PUBLIC glog)
 
 # frontend
 add_library(frontend STATIC frontend/feature_pipeline.cc frontend/fft.cc)
@@ -79,3 +92,6 @@ target_link_libraries(fbank_main PUBLIC frontend utils ${TORCH_LIBRARIES})
 
 add_executable(libtorch_test test_scripts/libtorch_test.cc)
 target_link_libraries(libtorch_test PUBLIC frontend utils ${TORCH_LIBRARIES})
+
+add_executable(voiceprint_main voiceprint/voiceprint_main.cc)
+target_link_libraries(voiceprint_main PUBLIC frontend utils gflags  ${TORCH_LIBRARIES})

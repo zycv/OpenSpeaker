@@ -16,23 +16,25 @@
 #include <iostream>
 #include <string>
 
-#include <torch/script.h>
-#include <torch/torch.h>
+#include "glog/logging.h"
+#include "torch/script.h"
+#include "torch/torch.h"
 
 int main(int argc, char *argv[]) {
+  google::InitGoogleLogging(argv[0]);
   torch::DeviceType device_type;
   if (torch::cuda::is_available()) {
-    std::cout << "CUDA available! Predicting on GPU." << std::endl;
+    LOG(INFO) << "CUDA available! Predicting on GPU.";
     device_type = torch::kCUDA;
   } else {
-    std::cout << "Predicting on CPU." << std::endl;
+    LOG(INFO) << "Predicting on CPU.";
     device_type = torch::kCPU;
   }
   torch::Device device(device_type);
   torch::Tensor tensor = torch::eye(3);
   tensor = tensor.to(device_type);
-  std::cout << "hello torch" << std::endl;
-  std::cout << tensor << std::endl;
+  LOG(INFO) << "hello torch";
+  LOG(INFO) << tensor;
 
   std::string model_path = "";
   torch::jit::script::Module model = torch::jit::load(model_path);
@@ -44,7 +46,7 @@ int main(int argc, char *argv[]) {
   std::vector<float> embedding;
   for (int i = 0; i < outputs.size(2); ++i) {
     embedding.push_back(accessor[0][0][i]);
-    std::cout << embedding.size() << " " << accessor[0][0][i] << std::endl;
+    LOG(INFO) << embedding.size() << " " << accessor[0][0][i];
   }
 
   return 0;

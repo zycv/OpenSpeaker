@@ -16,14 +16,14 @@
 #include <iostream>
 #include <string>
 
+#include "glog/logging.h"
+
 #include "frontend/feature_pipeline.h"
 #include "frontend/wav.h"
 
-#include "glog/logging.h"
-
 int main(int argc, char *argv[]) {
   google::InitGoogleLogging(argv[0]);
-  std::cout << "Hello" << std::endl;
+  LOG(INFO) << "Hello";
   std::string audio_wav = "../test_data/BAC009S0749W0489.wav";
   wenet::WavReader wav_reader(audio_wav);
   wenet::FeaturePipelineConfig config(80, 16000);
@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
   feature_pipeline.Read(std::numeric_limits<int>::max(), &chunk_feats);
   for (const auto &feats : chunk_feats) {
     for (auto f : feats) {
-      std::cout << f << std::endl;
+      LOG(INFO) << f;
     }
     break;
   }
