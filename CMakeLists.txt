@@ -3,8 +3,7 @@ cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 project(openspeaker VERSION 0.1)
 
 include_directories(
-  ${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/kaldi # for not changing c++ header
-  # names in kaldi source files
+  ${CMAKE_SOURCE_DIR}
 )
 
 include(FetchContent)
@@ -93,5 +92,5 @@ target_link_libraries(fbank_main PUBLIC frontend utils ${TORCH_LIBRARIES})
 add_executable(libtorch_test test_scripts/libtorch_test.cc)
 target_link_libraries(libtorch_test PUBLIC frontend utils ${TORCH_LIBRARIES})
 
-add_executable(voiceprint_main voiceprint/voiceprint_main.cc)
+add_executable(voiceprint_main voiceprint/features.cc voiceprint/voiceprint_main.cc)
 target_link_libraries(voiceprint_main PUBLIC frontend utils gflags  ${TORCH_LIBRARIES})

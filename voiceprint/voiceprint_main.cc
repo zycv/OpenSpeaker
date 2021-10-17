@@ -23,6 +23,7 @@
 
 #include "frontend/feature_pipeline.h"
 #include "frontend/wav.h"
+#include "voiceprint/features.h"
 
 DEFINE_string(model, "../model/tdnn.pt", "Path to voiceprint model.");
 DEFINE_string(enroll_wav, "../test_data/BAC009S0749W0480.wav",
@@ -33,20 +34,6 @@ DEFINE_uint32(sample_rate, 16000, "Wav sample rate supported.");
 DEFINE_uint32(feats_dims, 24, "Dims for input features.");
 
 using TorchModule = torch::jit::script::Module;
-
-void extractFeatures(const std::string& wav_path, unsigned int sample_rate,
-                     unsigned int feats_dims,
-                     std::vector<std::vector<float>>* chunk_feats) {
-  // Read wav and extract features.
-  wenet::WavReader wav_reader(wav_path);
-  wenet::FeaturePipelineConfig config(feats_dims, sample_rate);
-  wenet::FeaturePipeline feature_pipeline(config);
-  feature_pipeline.Reset();
-  feature_pipeline.AcceptWaveform(std::vector<float>(std::vector<float>(
-      wav_reader.data(), wav_reader.data() + wav_reader.num_sample())));
-  feature_pipeline.set_input_finished();
-  feature_pipeline.Read(std::numeric_limits<int>::max(), chunk_feats);
-}
 
 void feedForward(std::vector<std::vector<float>>* chunk_feats,
                  const std::string& model_path, std::vector<float>* embedding) {
@@ -99,7 +86,8 @@ int main(int argc, char* argv[]) {
 
   std::string wav_path = FLAGS_enroll_wav;
   std::vector<std::vector<float>> chunk_feats;
-  extractFeatures(wav_path, sample_rate, feats_dims, &chunk_feats);
+  OpenSpeaker::Features features(sample_rate, feats_dims);
+  features.extractFeatures(wav_path, &chunk_feats);
 
   std::vector<float> enroll_embedding;
   feedForward(&chunk_feats, model_path, &enroll_embedding);
@@ -107,7 +95,7 @@ int main(int argc, char* argv[]) {
 
   wav_path = FLAGS_test_wav;
   chunk_feats.clear();
-  extractFeatures(wav_path, sample_rate, feats_dims, &chunk_feats);
+  features.extractFeatures(wav_path, &chunk_feats);
   std::vector<float> test_embedding;
   feedForward(&chunk_feats, model_path, &test_embedding);
   LOG(INFO) << "Test wav embedding:" << test_embedding;
