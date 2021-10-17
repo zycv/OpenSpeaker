@@ -14,7 +14,22 @@
 
 #include "voiceprint/features.h"
 
+#include <algorithm>
+
 namespace OpenSpeaker {
+
+void Features::ApplyMean(std::vector<std::vector<float>>* feats) {
+  std::vector<float> mean(feats_dims_, 0);
+  for (auto& i : *feats) {
+    std::transform(i.begin(), i.end(), mean.begin(), mean.begin(),
+                   std::plus<>{});
+  }
+  std::transform(mean.begin(), mean.end(), mean.begin(),
+                 [&](const float d) { return d / feats->size(); });
+  for (auto& i : *feats) {
+    std::transform(i.begin(), i.end(), mean.begin(), i.begin(), std::minus<>{});
+  }
+}
 
 void Features::extractFeatures(const std::string& wav_path,
                                std::vector<std::vector<float>>* chunk_feats) {
@@ -27,6 +42,7 @@ void Features::extractFeatures(const std::string& wav_path,
       wav_reader.data(), wav_reader.data() + wav_reader.num_sample())));
   feature_pipeline.set_input_finished();
   feature_pipeline.Read(std::numeric_limits<int>::max(), chunk_feats);
+  ApplyMean(chunk_feats);
 }
 
 }  // namespace OpenSpeaker

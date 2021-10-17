@@ -35,6 +35,8 @@ class Features {
   unsigned int sample_rate_;
   unsigned int feats_dims_;
 
+  void ApplyMean(std::vector<std::vector<float>>* feats);
+
   // Disallow copy and assign
   Features(const Features&) = delete;
   Features& operator=(const Features&) = delete;
