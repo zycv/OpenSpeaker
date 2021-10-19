@@ -35,7 +35,7 @@ DEFINE_uint32(feats_dims, 24, "Dims for input features.");
 
 using TorchModule = torch::jit::script::Module;
 
-void feedForward(std::vector<std::vector<float>>* chunk_feats,
+void FeedForward(std::vector<std::vector<float>>* chunk_feats,
                  const std::string& model_path, std::vector<float>* embedding) {
   // Convert std::vector features to torch::Tensor as the scripted model need
   // Tensor as input.
@@ -87,17 +87,17 @@ int main(int argc, char* argv[]) {
   std::string wav_path = FLAGS_enroll_wav;
   std::vector<std::vector<float>> chunk_feats;
   OpenSpeaker::Features features(sample_rate, feats_dims);
-  features.extractFeatures(wav_path, &chunk_feats);
+  features.ExtractFeatures(wav_path, &chunk_feats);
 
   std::vector<float> enroll_embedding;
-  feedForward(&chunk_feats, model_path, &enroll_embedding);
+  FeedForward(&chunk_feats, model_path, &enroll_embedding);
   LOG(INFO) << "Enroll wav embedding:" << enroll_embedding;
 
   wav_path = FLAGS_test_wav;
   chunk_feats.clear();
-  features.extractFeatures(wav_path, &chunk_feats);
+  features.ExtractFeatures(wav_path, &chunk_feats);
   std::vector<float> test_embedding;
-  feedForward(&chunk_feats, model_path, &test_embedding);
+  FeedForward(&chunk_feats, model_path, &test_embedding);
   LOG(INFO) << "Test wav embedding:" << test_embedding;
 
   // Compute cosine similarity

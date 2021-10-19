@@ -16,7 +16,7 @@
 
 #include <algorithm>
 
-namespace OpenSpeaker {
+namespace openspeaker {
 
 void Features::ApplyMean(std::vector<std::vector<float>>* feats) {
   std::vector<float> mean(feats_dims_, 0);
@@ -31,7 +31,7 @@ void Features::ApplyMean(std::vector<std::vector<float>>* feats) {
   }
 }
 
-void Features::extractFeatures(const std::string& wav_path,
+void Features::ExtractFeatures(const std::string& wav_path,
                                std::vector<std::vector<float>>* chunk_feats) {
   // Read wav and extract features.
   wenet::WavReader wav_reader(wav_path);
@@ -45,4 +45,4 @@ void Features::extractFeatures(const std::string& wav_path,
   ApplyMean(chunk_feats);
 }
 
-}  // namespace OpenSpeaker
+}  // namespace openspeaker

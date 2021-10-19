@@ -21,14 +21,14 @@
 #include "frontend/feature_pipeline.h"
 #include "frontend/wav.h"
 
-namespace OpenSpeaker {
+namespace openspeaker {
 class Features {
  public:
   Features(unsigned int sample_rate, unsigned int feats_dims)
       : sample_rate_(sample_rate), feats_dims_(feats_dims) {}
   ~Features() = default;
 
-  void extractFeatures(const std::string& wav_path,
+  void ExtractFeatures(const std::string& wav_path,
                        std::vector<std::vector<float>>* chunk_feats);
 
  private:
@@ -41,6 +41,6 @@ class Features {
   Features(const Features&) = delete;
   Features& operator=(const Features&) = delete;
 };
-}  // namespace OpenSpeaker
+}  // namespace openspeaker
 
 #endif  // VOICEPRINT_FEATURES_H_
