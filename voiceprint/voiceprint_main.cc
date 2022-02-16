@@ -86,7 +86,7 @@ int main(int argc, char* argv[]) {
 
   std::string wav_path = FLAGS_enroll_wav;
   std::vector<std::vector<float>> chunk_feats;
-  OpenSpeaker::Features features(sample_rate, feats_dims);
+  openspeaker::Features features(sample_rate, feats_dims);
   features.ExtractFeatures(wav_path, &chunk_feats);
 
   std::vector<float> enroll_embedding;
